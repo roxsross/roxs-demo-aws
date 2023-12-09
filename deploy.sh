@@ -1,24 +1,18 @@
-#!/bin/bash
-BUCKET="front.bucket.295devops.io"
-REGION="us-east-1"
+ZIP="codigo.zip"
+FUNCTION="http-crud-tutorial-function"
 
-bucket_exists() {
-    aws s3api head-bucket --bucket $BUCKET 2>/dev/null
-}
+zip -r $ZIP index.mjs
 
-create_bucket() {
-    if ! bucket_exists $BUCKET; then
-        echo "Creating bucket $BUCKET"
-        aws s3api create-bucket --bucket $BUCKET --region $REGION 
-    else
-        echo "Bucket $BUCKET already exists"
-    fi
-}
+aws lambda update-function-code \
+    --function-name $FUNCTION \
+    --zip-file fileb://$ZIP > /dev/null
 
-sync_to_s3 () {
-    aws s3 sync . s3://$BUCKET --exclude ".git/*"
-    echo "Synced to $BUCKET"
-}
 
-create_bucket 
-sync_to_s3
+
+if [  $? -eq 0 ]; then
+    echo "Deployed successfully"
+else
+    echo "Deploy failed"
+fi
+
+rm $ZIP
