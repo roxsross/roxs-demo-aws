@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - export CACHEBUST_SUFFIX=$(date +"%y%m%d%H%M%S")
+      - mv styles.css styles-${CACHEBUST_SUFFIX}.css
+      - sed -i.bak s/styles.css/styles-${CACHEBUST_SUFFIX}.css/g index.html
+      - rm index.html.bak
+artifacts:
+  files:
+    - '**/*'
