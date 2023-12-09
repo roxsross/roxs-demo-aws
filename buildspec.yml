@@ -7,6 +7,7 @@ phases:
       - mv styles.css styles-${CACHEBUST_SUFFIX}.css
       - sed -i.bak s/styles.css/styles-${CACHEBUST_SUFFIX}.css/g index.html
       - rm index.html.bak
+      - ls -la
 artifacts:
   files:
     - '**/*'
